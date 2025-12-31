@@ -1,0 +1,2779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAVORY | Never say "I don't know" to dinner again</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#C1512E">
+  <meta name="description" content="Never say 'I don't know' to dinner again. AI-powered recipe generator with personalized dinner ideas.">
+  
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Savory">
+  <link rel="apple-touch-icon" href="icons/icon-152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="icons/icon-128.png">
+  
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Savory">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-96.png">
+  
+  <style>
+    :root {
+      /* Warm Editorial Palette */
+      --bg-primary: #FAF8F5;
+      --bg-secondary: #F2EDE9;
+      --bg-tertiary: #E8E2DB;
+      --bg-card: #FFFFFF;
+      
+      --text-primary: #2C2C2C;
+      --text-secondary: #5A5A5A;
+      --text-tertiary: #8A8A8A;
+      --text-muted: #A5A5A5;
+      
+      /* Accent Colors */
+      --accent-primary: #C1512E;
+      --accent-primary-hover: #A8432A;
+      --accent-secondary: #7A9A7A;
+      --accent-tertiary: #D4A574;
+      
+      /* Functional */
+      --success: #5A8F5A;
+      --warning: #D49B4E;
+      --error: #C45A5A;
+      
+      /* Shadows & Effects */
+      --shadow-sm: 0 1px 3px rgba(44, 44, 44, 0.06);
+      --shadow-md: 0 4px 12px rgba(44, 44, 44, 0.08);
+      --shadow-lg: 0 12px 40px rgba(44, 44, 44, 0.12);
+      --shadow-xl: 0 24px 60px rgba(44, 44, 44, 0.16);
+      
+      /* Typography */
+      --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+      --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      
+      /* Spacing Scale */
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 40px;
+      --space-2xl: 64px;
+      --space-3xl: 96px;
+      
+      /* Border Radius */
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-xl: 32px;
+      
+      /* Transitions */
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Dark Mode */
+    body.dark-mode {
+      --bg-primary: #1A1816;
+      --bg-secondary: #242220;
+      --bg-tertiary: #2E2A28;
+      --bg-card: #1E1C1A;
+      
+      --text-primary: #F5F2EF;
+      --text-secondary: #C4BEB8;
+      --text-tertiary: #8A847E;
+      --text-muted: #6A645E;
+      
+      --accent-primary: #E07050;
+      --accent-primary-hover: #F08060;
+      --accent-secondary: #8FB38F;
+      
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
+      --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.35);
+      --shadow-xl: 0 24px 60px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+      transition: background-color 0.4s ease, color 0.4s ease;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Subtle Paper Texture Overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.015;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    body.dark-mode::before {
+      opacity: 0.03;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       HEADER
+       ═══════════════════════════════════════════════════════════════ */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 72px;
+      background: rgba(250, 248, 245, 0.85);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      z-index: 100;
+      border-bottom: 1px solid rgba(44, 44, 44, 0.06);
+      transition: all 0.4s ease;
+    }
+
+    body.dark-mode header {
+      background: rgba(26, 24, 22, 0.9);
+      border-bottom-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 var(--space-xl);
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .logo:hover {
+      opacity: 0.8;
+    }
+
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-tertiary) 100%);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: white;
+      box-shadow: 0 2px 8px rgba(193, 81, 46, 0.3);
+    }
+
+    .nav-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .nav-btn {
+      font-family: var(--font-body);
+      background: transparent;
+      border: 1.5px solid transparent;
+      color: var(--text-secondary);
+      padding: 10px 18px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s var(--ease-out-expo);
+      position: relative;
+    }
+
+    .nav-btn:hover {
+      color: var(--text-primary);
+      background: var(--bg-secondary);
+    }
+
+    .nav-btn.active {
+      color: var(--accent-primary);
+      background: rgba(193, 81, 46, 0.08);
+      border-color: rgba(193, 81, 46, 0.2);
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1.5px solid var(--bg-tertiary);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.25s var(--ease-out-expo);
+    }
+
+    .icon-btn:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      background: rgba(193, 81, 46, 0.05);
+    }
+
+    .icon-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MAIN CONTENT
+       ═══════════════════════════════════════════════════════════════ */
+    main {
+      flex: 1;
+      padding-top: 72px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 var(--space-xl);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       WELCOME SCREEN
+       ═══════════════════════════════════════════════════════════════ */
+    .welcome-screen {
+      min-height: calc(100vh - 72px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3xl);
+      align-items: center;
+      padding: var(--space-3xl) var(--space-xl);
+    }
+
+    .welcome-content {
+      max-width: 540px;
+    }
+
+    .welcome-eyebrow {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-primary);
+      margin-bottom: var(--space-md);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .welcome-eyebrow::before {
+      content: '';
+      width: 32px;
+      height: 2px;
+      background: var(--accent-primary);
+      border-radius: 1px;
+    }
+
+    .welcome-title {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 6vw, 72px);
+      font-weight: 500;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: var(--space-lg);
+      color: var(--text-primary);
+    }
+
+    .welcome-title em {
+      font-style: italic;
+      color: var(--accent-primary);
+    }
+
+    .welcome-description {
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-xl);
+    }
+
+    .welcome-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .visual-circle {
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: var(--shadow-xl);
+    }
+
+    .visual-circle::before {
+      content: '';
+      position: absolute;
+      inset: 20px;
+      border-radius: 50%;
+      border: 2px dashed var(--accent-tertiary);
+      opacity: 0.4;
+      animation: rotate 60s linear infinite;
+    }
+
+    @keyframes rotate {
+      to { transform: rotate(360deg); }
+    }
+
+    .visual-emoji {
+      font-size: 120px;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .floating-badge {
+      position: absolute;
+      background: var(--bg-card);
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      animation: floatBadge 5s ease-in-out infinite;
+    }
+
+    .floating-badge:nth-child(2) {
+      top: 10%;
+      right: 5%;
+      animation-delay: -1s;
+    }
+
+    .floating-badge:nth-child(3) {
+      bottom: 15%;
+      left: 0;
+      animation-delay: -2.5s;
+    }
+
+    .floating-badge:nth-child(4) {
+      top: 60%;
+      right: -5%;
+      animation-delay: -4s;
+    }
+
+    @keyframes floatBadge {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-12px) rotate(2deg); }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       PRIMARY BUTTON
+       ═══════════════════════════════════════════════════════════════ */
+    .btn-primary {
+      font-family: var(--font-body);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      background: linear-gradient(135deg, var(--accent-primary) 0%, #D86040 100%);
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 18px 36px;
+      border: none;
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(193, 81, 46, 0.35);
+      transition: all 0.35s var(--ease-out-expo);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(193, 81, 46, 0.45);
+    }
+
+    .btn-primary:hover::before {
+      opacity: 1;
+    }
+
+    .btn-primary:active {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       GENERATOR SCREEN
+       ═══════════════════════════════════════════════════════════════ */
+    .generator-screen {
+      min-height: calc(100vh - 72px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-2xl) var(--space-xl);
+    }
+
+    .generator-header {
+      text-align: center;
+      margin-bottom: var(--space-xl);
+    }
+
+    .generator-title {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-sm);
+    }
+
+    .generator-subtitle {
+      color: var(--text-secondary);
+      font-size: 16px;
+    }
+
+    .generator-form {
+      width: 100%;
+      max-width: 560px;
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(44, 44, 44, 0.04);
+    }
+
+    body.dark-mode .generator-form {
+      border-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+    }
+
+    .form-group {
+      margin-bottom: var(--space-lg);
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .form-select {
+      width: 100%;
+      background: var(--bg-secondary);
+      border: 1.5px solid transparent;
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238A8A8A' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+    }
+
+    .form-select:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(193, 81, 46, 0.12);
+    }
+
+    .form-textarea {
+      width: 100%;
+      background: var(--bg-secondary);
+      border: 1.5px solid transparent;
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--text-primary);
+      resize: vertical;
+      min-height: 90px;
+      transition: all 0.25s ease;
+    }
+
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(193, 81, 46, 0.12);
+    }
+
+    .form-textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .form-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: var(--space-xs);
+    }
+
+    .generator-actions {
+      margin-top: var(--space-lg);
+      display: flex;
+      justify-content: center;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RECIPE SCREEN
+       ═══════════════════════════════════════════════════════════════ */
+    .recipe-screen {
+      padding: var(--space-xl);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .recipe-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-lg);
+    }
+
+    .recipe-nav-arrow {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-card);
+      border: 1.5px solid var(--bg-tertiary);
+      border-radius: 50%;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 20px;
+      transition: all 0.25s var(--ease-out-expo);
+    }
+
+    .recipe-nav-arrow:hover:not(:disabled) {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      transform: scale(1.05);
+    }
+
+    .recipe-nav-arrow:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .recipe-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-xl);
+      animation: cardSlideUp 0.6s var(--ease-out-expo);
+    }
+
+    @keyframes cardSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .recipe-hero {
+      position: relative;
+      height: 400px;
+      overflow: hidden;
+    }
+
+    .recipe-hero-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .recipe-card:hover .recipe-hero-image {
+      transform: scale(1.03);
+    }
+
+    .recipe-hero-fallback {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      opacity: 0.3;
+    }
+
+    .recipe-hero-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: var(--space-2xl) var(--space-xl) var(--space-xl);
+      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+    }
+
+    .recipe-badges {
+      display: flex;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+
+    .badge {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: var(--radius-lg);
+    }
+
+    .badge-cuisine {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      backdrop-filter: blur(10px);
+    }
+
+    .badge-difficulty {
+      background: var(--accent-tertiary);
+      color: #1a1a1a;
+    }
+
+    .badge-difficulty.easy {
+      background: var(--accent-secondary);
+    }
+
+    .badge-difficulty.advanced {
+      background: var(--error);
+      color: white;
+    }
+
+    .recipe-title {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 500;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: white;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+
+    .recipe-body {
+      padding: var(--space-xl);
+    }
+
+    /* Servings Selector */
+    .recipe-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-lg);
+      padding-bottom: var(--space-lg);
+      border-bottom: 1px solid var(--bg-tertiary);
+      margin-bottom: var(--space-xl);
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .meta-icon {
+      width: 18px;
+      height: 18px;
+      color: var(--accent-primary);
+    }
+
+    .servings-selector {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      background: var(--bg-secondary);
+      padding: 6px 8px 6px 14px;
+      border-radius: var(--radius-lg);
+      border: 1.5px solid transparent;
+      transition: all 0.25s ease;
+    }
+
+    .servings-selector:focus-within {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(193, 81, 46, 0.12);
+    }
+
+    .servings-selector label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .servings-select {
+      background: var(--accent-primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 6px 28px 6px 12px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='white' d='M5 7L1 3h8z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+
+    .servings-select:focus {
+      outline: none;
+    }
+
+    /* Recipe Sections */
+    .recipe-section {
+      margin-bottom: var(--space-xl);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+
+    .section-icon {
+      width: 24px;
+      height: 24px;
+      color: var(--accent-primary);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    /* Ingredients List */
+    .ingredients-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: var(--space-sm);
+    }
+
+    .ingredient-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      padding: var(--space-sm) 0;
+      font-size: 15px;
+      color: var(--text-primary);
+      transition: color 0.2s ease;
+    }
+
+    .ingredient-bullet {
+      width: 6px;
+      height: 6px;
+      background: var(--accent-primary);
+      border-radius: 2px;
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+
+    .ingredient-quantity {
+      font-weight: 600;
+      color: var(--accent-primary);
+      min-width: fit-content;
+    }
+
+    .ingredient-scaled {
+      animation: quantityPulse 0.4s ease;
+    }
+
+    @keyframes quantityPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); color: var(--accent-secondary); }
+      100% { transform: scale(1); }
+    }
+
+    /* Health Benefits */
+    .health-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: var(--space-sm);
+    }
+
+    .health-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      padding: var(--space-sm);
+      background: rgba(122, 154, 122, 0.08);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+    }
+
+    .health-bullet {
+      width: 6px;
+      height: 6px;
+      background: var(--accent-secondary);
+      border-radius: 50%;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    /* Instructions */
+    .instructions-list {
+      list-style: none;
+    }
+
+    .instruction-item {
+      display: flex;
+      gap: var(--space-md);
+      padding: var(--space-lg) 0;
+      border-bottom: 1px solid var(--bg-secondary);
+    }
+
+    .instruction-item:last-child {
+      border-bottom: none;
+    }
+
+    .instruction-number {
+      width: 36px;
+      height: 36px;
+      background: var(--accent-primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .instruction-text {
+      font-size: 16px;
+      line-height: 1.7;
+      padding-top: 6px;
+      color: var(--text-primary);
+    }
+
+    /* Recipe Actions */
+    .recipe-actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-sm);
+      margin-top: var(--space-xl);
+      padding-top: var(--space-lg);
+      border-top: 1px solid var(--bg-tertiary);
+    }
+
+    .action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-md);
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s var(--ease-out-expo);
+    }
+
+    .action-btn svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .action-btn-secondary {
+      background: var(--bg-secondary);
+      border: 1.5px solid transparent;
+      color: var(--text-secondary);
+    }
+
+    .action-btn-secondary:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      background: rgba(193, 81, 46, 0.05);
+    }
+
+    .action-btn-primary {
+      background: var(--accent-primary);
+      border: none;
+      color: white;
+    }
+
+    .action-btn-primary:hover {
+      background: var(--accent-primary-hover);
+      transform: translateY(-2px);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       FAVORITES & HISTORY SCREENS
+       ═══════════════════════════════════════════════════════════════ */
+    .list-screen {
+      padding: var(--space-2xl) var(--space-xl);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .screen-header {
+      margin-bottom: var(--space-xl);
+    }
+
+    .screen-title {
+      font-family: var(--font-display);
+      font-size: 36px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-xs);
+    }
+
+    .screen-subtitle {
+      color: var(--text-secondary);
+      font-size: 16px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: var(--space-lg);
+    }
+
+    .card-item {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.35s var(--ease-out-expo);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      border: 1px solid transparent;
+    }
+
+    .card-item:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--accent-primary);
+    }
+
+    .card-thumbnail {
+      width: 120px;
+      height: 110px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .card-content {
+      flex: 1;
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 500;
+      margin-bottom: var(--space-xs);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-meta {
+      font-size: 13px;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .card-badges {
+      display: flex;
+      gap: var(--space-xs);
+    }
+
+    .card-badge {
+      font-size: 10px;
+      padding: 3px 8px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-sm);
+      color: var(--text-tertiary);
+    }
+
+    .card-delete {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: var(--space-md);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-delete:hover {
+      color: var(--error);
+      background: rgba(196, 90, 90, 0.1);
+    }
+
+    .card-delete svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: var(--space-3xl) var(--space-xl);
+      grid-column: 1 / -1;
+    }
+
+    .empty-icon {
+      font-size: 64px;
+      margin-bottom: var(--space-lg);
+      opacity: 0.4;
+    }
+
+    .empty-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      margin-bottom: var(--space-sm);
+      color: var(--text-secondary);
+    }
+
+    .empty-text {
+      font-size: 15px;
+      color: var(--text-tertiary);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MODALS
+       ═══════════════════════════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 44, 44, 0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-xl);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.35s ease;
+    }
+
+    body.dark-mode .modal-overlay {
+      background: rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      max-width: 440px;
+      width: 100%;
+      box-shadow: var(--shadow-xl);
+      transform: scale(0.95) translateY(20px);
+      transition: transform 0.4s var(--ease-out-expo);
+    }
+
+    .modal-overlay.active .modal {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 500;
+      margin-bottom: var(--space-sm);
+    }
+
+    .modal-description {
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: var(--space-lg);
+    }
+
+    .modal-form-group {
+      margin-bottom: var(--space-lg);
+    }
+
+    .modal-form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .modal-form-input {
+      width: 100%;
+      background: var(--bg-secondary);
+      border: 1.5px solid transparent;
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--text-primary);
+      transition: all 0.25s ease;
+    }
+
+    .modal-form-input:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(193, 81, 46, 0.12);
+    }
+
+    .modal-form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .modal-form-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: var(--space-xs);
+    }
+
+    .modal-form-hint a {
+      color: var(--accent-primary);
+      text-decoration: none;
+    }
+
+    .modal-form-hint a:hover {
+      text-decoration: underline;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: var(--space-sm);
+      justify-content: flex-end;
+      margin-top: var(--space-xl);
+    }
+
+    .modal-btn {
+      font-family: var(--font-body);
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .modal-btn-secondary {
+      background: var(--bg-secondary);
+      border: 1.5px solid var(--bg-tertiary);
+      color: var(--text-secondary);
+    }
+
+    .modal-btn-secondary:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+    }
+
+    .modal-btn-primary {
+      background: var(--accent-primary);
+      border: none;
+      color: white;
+    }
+
+    .modal-btn-primary:hover {
+      background: var(--accent-primary-hover);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       LOADING OVERLAY
+       ═══════════════════════════════════════════════════════════════ */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(250, 248, 245, 0.95);
+      z-index: 150;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.35s ease;
+    }
+
+    body.dark-mode .loading-overlay {
+      background: rgba(26, 24, 22, 0.95);
+    }
+
+    .loading-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--bg-tertiary);
+      border-top-color: var(--accent-primary);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+
+    .loading-text {
+      font-family: var(--font-display);
+      font-size: 20px;
+      color: var(--text-secondary);
+      margin-top: var(--space-lg);
+    }
+
+    .loading-dots {
+      display: flex;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+
+    .loading-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent-primary);
+      border-radius: 50%;
+      animation: dotPulse 1.4s ease-in-out infinite;
+    }
+
+    .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes dotPulse {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TOAST
+       ═══════════════════════════════════════════════════════════════ */
+    .toast {
+      position: fixed;
+      bottom: var(--space-xl);
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      padding: 14px 28px;
+      border-radius: var(--radius-lg);
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 300;
+      opacity: 0;
+      transition: all 0.4s var(--ease-out-expo);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .toast-icon {
+      width: 18px;
+      height: 18px;
+      color: var(--accent-secondary);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       UTILITY CLASSES
+       ═══════════════════════════════════════════════════════════════ */
+    .hidden {
+      display: none !important;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       PRINT STYLES
+       ═══════════════════════════════════════════════════════════════ */
+    @media print {
+      body {
+        background: white !important;
+        color: #1a1a1a !important;
+      }
+
+      header, .recipe-nav, .recipe-actions, .toast, .modal-overlay, .loading-overlay {
+        display: none !important;
+      }
+
+      main {
+        padding-top: 0 !important;
+      }
+
+      .recipe-screen {
+        max-width: 100% !important;
+        padding: 0 !important;
+      }
+
+      .recipe-card {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+      }
+
+      .recipe-hero {
+        height: 280px !important;
+      }
+
+      .recipe-title {
+        color: #1a1a1a !important;
+        text-shadow: none !important;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RESPONSIVE
+       ═══════════════════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .welcome-screen {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: var(--space-2xl) var(--space-lg);
+      }
+
+      .welcome-content {
+        max-width: 100%;
+      }
+
+      .welcome-eyebrow {
+        justify-content: center;
+      }
+
+      .welcome-visual {
+        order: -1;
+      }
+
+      .visual-circle {
+        width: 280px;
+        height: 280px;
+      }
+
+      .visual-emoji {
+        font-size: 80px;
+      }
+
+      .floating-badge {
+        display: none;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      :root {
+        --space-xl: 24px;
+        --space-2xl: 40px;
+      }
+
+      .header-content {
+        padding: 0 var(--space-md);
+      }
+
+      .nav-btn span {
+        display: none;
+      }
+
+      .recipe-hero {
+        height: 280px;
+      }
+
+      .recipe-title {
+        font-size: 28px;
+      }
+
+      .recipe-meta {
+        gap: var(--space-md);
+      }
+
+      .recipe-actions {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .ingredients-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card-item {
+        flex-direction: column;
+      }
+
+      .card-thumbnail {
+        width: 100%;
+        height: 160px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header>
+      <div class="header-content">
+        <a href="#" class="logo" onclick="UI.switchView('generator'); return false;">
+          <div class="logo-mark">S</div>
+          <span>Savory</span>
+        </a>
+        <nav class="nav-group">
+          <button class="nav-btn active" data-view="generator">
+            <span>Generate</span>
+          </button>
+          <button class="nav-btn" data-view="favorites">
+            <span>Favorites</span>
+          </button>
+          <button class="nav-btn" data-view="history">
+            <span>History</span>
+          </button>
+          <button class="icon-btn" id="theme-toggle" title="Toggle theme">
+            <svg class="sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            <svg class="moon-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+          </button>
+          <button class="icon-btn" id="settings-btn" title="Settings">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <!-- Welcome Screen -->
+      <section id="welcome-screen" class="welcome-screen hidden">
+        <div class="welcome-content">
+          <div class="welcome-eyebrow">Your Personal Chef</div>
+          <h1 class="welcome-title">Never say <em>"I don't know"</em> to dinner again</h1>
+          <p class="welcome-description">
+            Discover restaurant-quality recipes tailored to your taste. 
+            From quick weeknight meals to impressive dinner parties—your next 
+            delicious meal is just one click away.
+          </p>
+          <button class="btn-primary" id="welcome-generate-btn">
+            <span>What's for dinner?</span>
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="welcome-visual">
+          <div class="visual-circle">
+            <div class="visual-emoji">🍽️</div>
+          </div>
+          <div class="floating-badge">✨ AI-Powered</div>
+          <div class="floating-badge">❤️ Heart Healthy</div>
+          <div class="floating-badge">🌿 Fresh Ideas</div>
+        </div>
+      </section>
+
+      <!-- Generator Screen -->
+      <section id="generator-screen" class="generator-screen">
+        <div class="generator-header">
+          <h1 class="generator-title">What are you in the mood for?</h1>
+          <p class="generator-subtitle">Tell us your preferences and we'll find the perfect recipe</p>
+        </div>
+        <div class="generator-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="cuisine-select">Cuisine</label>
+              <select class="form-select" id="cuisine-select">
+                <option value="">Any Cuisine</option>
+                <option value="Italian">Italian</option>
+                <option value="Chinese">Chinese</option>
+                <option value="Japanese">Japanese</option>
+                <option value="Mexican">Mexican</option>
+                <option value="Indian">Indian</option>
+                <option value="Thai">Thai</option>
+                <option value="French">French</option>
+                <option value="American">American</option>
+                <option value="Mediterranean">Mediterranean</option>
+                <option value="Korean">Korean</option>
+                <option value="Vietnamese">Vietnamese</option>
+                <option value="Greek">Greek</option>
+                <option value="Spanish">Spanish</option>
+                <option value="Dominican">Dominican</option>
+                <option value="Puerto Rican">Puerto Rican</option>
+                <option value="Cuban">Cuban</option>
+                <option value="Brazilian">Brazilian</option>
+                <option value="Peruvian">Peruvian</option>
+                <option value="Ethiopian">Ethiopian</option>
+                <option value="Lebanese">Lebanese</option>
+                <option value="Moroccan">Moroccan</option>
+                <option value="Turkish">Turkish</option>
+                <option value="Caribbean">Caribbean</option>
+                <option value="Southern">Southern</option>
+                <option value="Cajun">Cajun</option>
+                <option value="German">German</option>
+                <option value="British">British</option>
+                <option value="Irish">Irish</option>
+                <option value="Polish">Polish</option>
+                <option value="Russian">Russian</option>
+                <option value="Portuguese">Portuguese</option>
+                <option value="Filipino">Filipino</option>
+                <option value="Indonesian">Indonesian</option>
+                <option value="Malaysian">Malaysian</option>
+                <option value="Hawaiian">Hawaiian</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="dietary-select">Dietary Focus</label>
+              <select class="form-select" id="dietary-select">
+                <option value="">No Specific Diet</option>
+                <option value="Heart Healthy">Heart Healthy</option>
+                <option value="Low Sodium">Low Sodium</option>
+                <option value="Diabetes Friendly">Diabetes Friendly</option>
+                <option value="Low Cholesterol">Low Cholesterol</option>
+                <option value="High Protein">High Protein</option>
+                <option value="Anti-Inflammatory">Anti-Inflammatory</option>
+                <option value="Bone Health">Bone Health Focused</option>
+                <option value="Brain Health">Brain Health Boost</option>
+                <option value="Weight Management">Weight Management</option>
+                <option value="Vegetarian">Vegetarian</option>
+                <option value="Pescatarian">Pescatarian</option>
+                <option value="Gluten Free">Gluten Free</option>
+                <option value="Dairy Free">Dairy Free</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <label class="form-label" for="servings-default">Default Servings</label>
+            <select class="form-select" id="servings-default">
+              <option value="2">2 people</option>
+              <option value="3">3 people</option>
+              <option value="4" selected>4 people</option>
+              <option value="5">5 people</option>
+              <option value="6">6 people</option>
+              <option value="8">8 people</option>
+              <option value="10">10 people</option>
+              <option value="12">12 people</option>
+            </select>
+          </div>
+          <div class="form-group full-width">
+            <label class="form-label" for="ingredients-input">Ingredients on Hand</label>
+            <textarea class="form-textarea" id="ingredients-input" placeholder="e.g., chicken breast, spinach, garlic, tomatoes, pasta..."></textarea>
+            <p class="form-hint">Optional: enter ingredients you have and we'll try to use them</p>
+          </div>
+          <div class="generator-actions">
+            <button class="btn-primary" id="main-generate-btn">
+              <span>Find My Recipe</span>
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Recipe Screen -->
+      <section id="recipe-screen" class="recipe-screen hidden">
+        <div class="recipe-nav">
+          <button class="recipe-nav-arrow" id="prev-recipe" disabled>←</button>
+          <button class="recipe-nav-arrow" id="next-recipe" disabled>→</button>
+        </div>
+        <div class="recipe-card" id="recipe-card">
+          <!-- Recipe content injected here -->
+        </div>
+      </section>
+
+      <!-- Favorites Screen -->
+      <section id="favorites-screen" class="list-screen hidden">
+        <div class="screen-header">
+          <h1 class="screen-title">Your Favorites</h1>
+          <p class="screen-subtitle">Recipes you've saved for later</p>
+        </div>
+        <div class="cards-grid" id="favorites-grid">
+          <!-- Favorites injected here -->
+        </div>
+      </section>
+
+      <!-- History Screen -->
+      <section id="history-screen" class="list-screen hidden">
+        <div class="screen-header">
+          <h1 class="screen-title">Recent Ideas</h1>
+          <p class="screen-subtitle">Your recently generated recipes</p>
+        </div>
+        <div class="cards-grid" id="history-grid">
+          <!-- History injected here -->
+        </div>
+      </section>
+    </main>
+
+    <!-- API Key Modal -->
+    <div class="modal-overlay" id="api-key-modal">
+      <div class="modal">
+        <h2 class="modal-title">Welcome to Savory</h2>
+        <p class="modal-description">
+          To generate personalized recipes, Savory uses OpenRouter's AI. 
+          Your API key is stored locally and never shared.
+        </p>
+        <div class="modal-form-group">
+          <label class="modal-form-label" for="api-key-input">OpenRouter API Key</label>
+          <input type="password" class="modal-form-input" id="api-key-input" placeholder="sk-or-v1-...">
+          <p class="modal-form-hint">
+            Get your key at <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a>
+          </p>
+        </div>
+        <div class="modal-actions">
+          <button class="modal-btn modal-btn-primary" id="save-api-key">Get Started</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settings-modal">
+      <div class="modal">
+        <h2 class="modal-title">Settings</h2>
+        <p class="modal-description">Manage your Savory preferences</p>
+        <div class="modal-form-group">
+          <label class="modal-form-label" for="settings-api-key">OpenRouter API Key</label>
+          <input type="password" class="modal-form-input" id="settings-api-key" placeholder="sk-or-v1-...">
+        </div>
+        <div class="modal-actions">
+          <button class="modal-btn modal-btn-secondary" id="close-settings">Cancel</button>
+          <button class="modal-btn modal-btn-primary" id="save-settings">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Consulting the chef...</p>
+      <div class="loading-dots">
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+        <div class="loading-dot"></div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+      <svg class="toast-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+      </svg>
+      <span id="toast-message">Recipe saved!</span>
+    </div>
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════════
+    // CONFIGURATION
+    // ═══════════════════════════════════════════════════════════════
+    const DEFAULT_API_KEY = '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';
+    
+    const FOOD_IMAGES = [
+      'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1200&q=80',
+      'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=1200&q=80',
+      'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=1200&q=80',
+      'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=1200&q=80',
+      'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=1200&q=80',
+      'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=1200&q=80',
+      'https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=1200&q=80',
+      'https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=1200&q=80',
+      'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=80',
+      'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=1200&q=80'
+    ];
+
+    // ═══════════════════════════════════════════════════════════════
+    // STATE
+    // ═══════════════════════════════════════════════════════════════
+    const state = {
+      apiKey: null,
+      currentRecipe: null,
+      currentIndex: 0,
+      history: [],
+      favorites: [],
+      currentView: 'generator',
+      cuisinePreference: '',
+      dietaryPreference: '',
+      ingredientsOnHand: '',
+      defaultServings: 4,
+      currentServings: 4,
+      baseIngredients: [] // Store parsed ingredients with base quantities
+    };
+
+    // ═══════════════════════════════════════════════════════════════
+    // STORAGE
+    // ═══════════════════════════════════════════════════════════════
+    const Storage = {
+      KEYS: {
+        API_KEY: 'savory_api_key',
+        FAVORITES: 'savory_favorites',
+        HISTORY: 'savory_history',
+        THEME: 'savory_theme',
+        CUISINE_PREF: 'savory_cuisine_pref',
+        DIETARY_PREF: 'savory_dietary_pref',
+        INGREDIENTS: 'savory_ingredients',
+        DEFAULT_SERVINGS: 'savory_default_servings'
+      },
+
+      save(key, value) {
+        try {
+          localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+        } catch (e) {
+          console.error(`Failed to save ${key}:`, e);
+        }
+      },
+
+      get(key, defaultValue = null) {
+        try {
+          const stored = localStorage.getItem(key);
+          if (!stored) return defaultValue;
+          try {
+            return JSON.parse(stored);
+          } catch {
+            return stored;
+          }
+        } catch {
+          return defaultValue;
+        }
+      },
+
+      saveAPIKey(key) { this.save(this.KEYS.API_KEY, key); },
+      getAPIKey() { return this.get(this.KEYS.API_KEY) || DEFAULT_API_KEY; },
+
+      saveTheme(theme) { this.save(this.KEYS.THEME, theme); },
+      getTheme() { return this.get(this.KEYS.THEME, 'light'); },
+
+      saveCuisinePref(val) { this.save(this.KEYS.CUISINE_PREF, val); },
+      getCuisinePref() { return this.get(this.KEYS.CUISINE_PREF, ''); },
+
+      saveDietaryPref(val) { this.save(this.KEYS.DIETARY_PREF, val); },
+      getDietaryPref() { return this.get(this.KEYS.DIETARY_PREF, ''); },
+
+      saveIngredients(val) { this.save(this.KEYS.INGREDIENTS, val); },
+      getIngredients() { return this.get(this.KEYS.INGREDIENTS, ''); },
+
+      saveDefaultServings(val) { this.save(this.KEYS.DEFAULT_SERVINGS, val); },
+      getDefaultServings() { return parseInt(this.get(this.KEYS.DEFAULT_SERVINGS, '4')); },
+
+      saveFavorite(recipe) {
+        const favorites = this.getFavorites();
+        const recipeWithId = {
+          ...recipe,
+          id: Date.now(),
+          savedAt: new Date().toISOString()
+        };
+        favorites.unshift(recipeWithId);
+        this.save(this.KEYS.FAVORITES, favorites);
+        return recipeWithId;
+      },
+
+      getFavorites() { return this.get(this.KEYS.FAVORITES, []); },
+
+      removeFavorite(id) {
+        const favorites = this.getFavorites().filter(f => f.id !== id);
+        this.save(this.KEYS.FAVORITES, favorites);
+      },
+
+      addToHistory(recipe) {
+        const history = this.getHistory();
+        const recipeWithId = {
+          ...recipe,
+          id: Date.now(),
+          generatedAt: new Date().toISOString()
+        };
+        history.unshift(recipeWithId);
+        this.save(this.KEYS.HISTORY, history.slice(0, 30));
+        return recipeWithId;
+      },
+
+      getHistory() { return this.get(this.KEYS.HISTORY, []); }
+    };
+
+    // ═══════════════════════════════════════════════════════════════
+    // INGREDIENT PARSER & SCALER
+    // ═══════════════════════════════════════════════════════════════
+    const IngredientScaler = {
+      // Parse ingredient string to extract quantity, unit, and name
+      parse(ingredientStr) {
+        // Common fraction mappings
+        const fractions = {
+          '½': 0.5, '⅓': 0.333, '⅔': 0.667, '¼': 0.25, '¾': 0.75,
+          '⅛': 0.125, '⅜': 0.375, '⅝': 0.625, '⅞': 0.875,
+          '1/2': 0.5, '1/3': 0.333, '2/3': 0.667, '1/4': 0.25, '3/4': 0.75,
+          '1/8': 0.125, '3/8': 0.375, '5/8': 0.625, '7/8': 0.875
+        };
+
+        // Match patterns like "2 cups", "1/2 lb", "1½ tsp", "3-4 cloves"
+        const quantityPattern = /^([\d½⅓⅔¼¾⅛⅜⅝⅞\/\s\-\.]+)?\s*(cups?|cup|tbsps?|tablespoons?|tsps?|teaspoons?|oz|ounces?|lbs?|pounds?|g|grams?|kg|kilograms?|ml|milliliters?|l|liters?|cloves?|pieces?|slices?|heads?|bunche?s?|cans?|packages?|pinch|dash|handful|bunch|stalk|stalks|medium|large|small|whole)?\s*(.*)/i;
+        
+        const match = ingredientStr.match(quantityPattern);
+        
+        if (!match) {
+          return { original: ingredientStr, quantity: null, unit: '', name: ingredientStr, scalable: false };
+        }
+
+        let [, quantityStr, unit, name] = match;
+        quantityStr = (quantityStr || '').trim();
+        unit = (unit || '').toLowerCase();
+        name = (name || '').trim();
+
+        // If no name extracted, use the whole string
+        if (!name && !quantityStr && !unit) {
+          return { original: ingredientStr, quantity: null, unit: '', name: ingredientStr, scalable: false };
+        }
+
+        // Parse quantity
+        let quantity = null;
+        if (quantityStr) {
+          // Handle ranges like "3-4"
+          if (quantityStr.includes('-')) {
+            const [low, high] = quantityStr.split('-').map(n => parseFloat(n.trim()));
+            quantity = (low + high) / 2;
+          } else {
+            // Handle mixed numbers like "1 1/2" or "1½"
+            let total = 0;
+            const parts = quantityStr.trim().split(/\s+/);
+            for (const part of parts) {
+              if (fractions[part]) {
+                total += fractions[part];
+              } else if (part.includes('/')) {
+                const [num, denom] = part.split('/').map(n => parseFloat(n));
+                if (denom) total += num / denom;
+              } else {
+                const parsed = parseFloat(part);
+                if (!isNaN(parsed)) total += parsed;
+              }
+            }
+            quantity = total || null;
+          }
+        }
+
+        return {
+          original: ingredientStr,
+          quantity,
+          unit,
+          name: name || ingredientStr,
+          scalable: quantity !== null
+        };
+      },
+
+      // Format a number nicely (convert decimals to fractions where appropriate)
+      formatQuantity(num) {
+        if (num === null || num === undefined) return '';
+        
+        const whole = Math.floor(num);
+        const decimal = num - whole;
+        
+        // Common fractions
+        const fractionMap = [
+          [0.125, '⅛'], [0.25, '¼'], [0.333, '⅓'], [0.375, '⅜'],
+          [0.5, '½'], [0.625, '⅝'], [0.667, '⅔'], [0.75, '¾'], [0.875, '⅞']
+        ];
+
+        let fractionStr = '';
+        if (decimal > 0.05) {
+          // Find closest fraction
+          let closest = fractionMap.reduce((prev, curr) => 
+            Math.abs(curr[0] - decimal) < Math.abs(prev[0] - decimal) ? curr : prev
+          );
+          if (Math.abs(closest[0] - decimal) < 0.1) {
+            fractionStr = closest[1];
+          } else {
+            // Just use decimal
+            return num.toFixed(1).replace(/\.0$/, '');
+          }
+        }
+
+        if (whole === 0 && fractionStr) return fractionStr;
+        if (fractionStr) return `${whole} ${fractionStr}`;
+        return whole.toString();
+      },
+
+      // Scale ingredient for new serving size
+      scale(parsed, baseServings, targetServings) {
+        if (!parsed.scalable || !parsed.quantity) {
+          return parsed.original;
+        }
+
+        const ratio = targetServings / baseServings;
+        const newQuantity = parsed.quantity * ratio;
+        const formattedQty = this.formatQuantity(newQuantity);
+
+        // Reconstruct ingredient string
+        const parts = [formattedQty];
+        if (parsed.unit) parts.push(parsed.unit);
+        if (parsed.name) parts.push(parsed.name);
+        
+        return parts.join(' ');
+      }
+    };
+
+    // ═══════════════════════════════════════════════════════════════
+    // API
+    // ═══════════════════════════════════════════════════════════════
+    const API = {
+      baseURL: 'https://openrouter.ai/api/v1/chat/completions',
+
+      async generateRecipe(apiKey, cuisine = '', dietary = '', ingredients = '', servings = 4) {
+        let userPrompt = `Suggest a delicious, healthy dinner idea for ${servings} people. Include complete recipe and instructions.`;
+        
+        if (cuisine) {
+          userPrompt = `Suggest a delicious, healthy ${cuisine} dinner idea for ${servings} people. Include complete recipe and instructions.`;
+        }
+        
+        if (dietary) {
+          userPrompt += ` \n\nThis should be ${dietary} - keep this dietary focus in mind.`;
+        }
+        
+        if (ingredients) {
+          userPrompt += ` \n\nPlease try to incorporate these ingredients: ${ingredients}.`;
+        }
+
+        const response = await fetch(this.baseURL, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+            'HTTP-Referer': window.location.href,
+            'X-Title': 'Savory Dinner Ideas'
+          },
+          body: JSON.stringify({
+            model: 'minimax/minimax-m2.1',
+            messages: [
+              {
+                role: 'system',
+                content: `You are a professional chef specializing in healthy, nutritious meals. 
+
+IMPORTANT: Generate recipes for exactly ${servings} servings.
+
+Format your response as JSON with these exact fields:
+- dishName (string): Name of the dish
+- cuisine (string): Type of cuisine
+- prepTime (string): e.g., "15 minutes"
+- cookTime (string): e.g., "25 minutes"
+- servings (string): "${servings} servings"
+- baseServings (number): ${servings}
+- ingredients (array of strings): List of ingredients with PRECISE measurements (use fractions like 1/2, 1/4 when appropriate)
+- instructions (array of strings): Numbered cooking steps
+- difficulty (string): "Easy", "Medium", or "Advanced"
+- imageSearchTerm (string): 2-3 word food photography search term
+- healthBenefits (array of strings): 3-4 health benefits
+- nutritionHighlights (array of strings): Key nutritional highlights
+
+Be precise with measurements. Return ONLY valid JSON.`
+              },
+              { role: 'user', content: userPrompt }
+            ],
+            response_format: { type: 'json_object' },
+            temperature: 0.8
+          })
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`API Error: ${response.status} - ${errorText}`);
+        }
+
+        const data = await response.json();
+        const content = data.choices[0].message.content;
+        
+        let recipe;
+        try {
+          recipe = JSON.parse(content);
+        } catch {
+          const jsonMatch = content.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            recipe = JSON.parse(jsonMatch[0]);
+          } else {
+            throw new Error('Invalid JSON response');
+          }
+        }
+
+        // Ensure baseServings is set
+        recipe.baseServings = recipe.baseServings || servings;
+        recipe.imageUrl = FOOD_IMAGES[Math.floor(Math.random() * FOOD_IMAGES.length)];
+
+        return recipe;
+      }
+    };
+
+    // ═══════════════════════════════════════════════════════════════
+    // THEME
+    // ═══════════════════════════════════════════════════════════════
+    const Theme = {
+      init() {
+        this.set(Storage.getTheme());
+      },
+
+      toggle() {
+        const newTheme = document.body.classList.contains('dark-mode') ? 'light' : 'dark';
+        this.set(newTheme);
+        Storage.saveTheme(newTheme);
+      },
+
+      set(theme) {
+        document.body.classList.toggle('dark-mode', theme === 'dark');
+        this.updateIcons(theme);
+      },
+
+      updateIcons(theme) {
+        const sunIcon = document.querySelector('.sun-icon');
+        const moonIcon = document.querySelector('.moon-icon');
+        if (theme === 'dark') {
+          sunIcon.style.display = 'block';
+          moonIcon.style.display = 'none';
+        } else {
+          sunIcon.style.display = 'none';
+          moonIcon.style.display = 'block';
+        }
+      }
+    };
+
+    // ═══════════════════════════════════════════════════════════════
+    // UI
+    // ═══════════════════════════════════════════════════════════════
+    const UI = {
+      elements: {},
+
+      init() {
+        this.cacheElements();
+        this.bindEvents();
+        this.loadState();
+      },
+
+      cacheElements() {
+        this.elements = {
+          screens: {
+            welcome: document.getElementById('welcome-screen'),
+            generator: document.getElementById('generator-screen'),
+            recipe: document.getElementById('recipe-screen'),
+            favorites: document.getElementById('favorites-screen'),
+            history: document.getElementById('history-screen')
+          },
+          buttons: {
+            welcomeGenerate: document.getElementById('welcome-generate-btn'),
+            mainGenerate: document.getElementById('main-generate-btn'),
+            prevRecipe: document.getElementById('prev-recipe'),
+            nextRecipe: document.getElementById('next-recipe'),
+            settings: document.getElementById('settings-btn'),
+            saveApiKey: document.getElementById('save-api-key'),
+            saveSettings: document.getElementById('save-settings'),
+            closeSettings: document.getElementById('close-settings'),
+            themeToggle: document.getElementById('theme-toggle')
+          },
+          modals: {
+            apiKey: document.getElementById('api-key-modal'),
+            settings: document.getElementById('settings-modal')
+          },
+          inputs: {
+            apiKey: document.getElementById('api-key-input'),
+            settingsApiKey: document.getElementById('settings-api-key'),
+            cuisineSelect: document.getElementById('cuisine-select'),
+            dietarySelect: document.getElementById('dietary-select'),
+            ingredientsInput: document.getElementById('ingredients-input'),
+            servingsDefault: document.getElementById('servings-default')
+          },
+          recipeCard: document.getElementById('recipe-card'),
+          favoritesGrid: document.getElementById('favorites-grid'),
+          historyGrid: document.getElementById('history-grid'),
+          loadingOverlay: document.getElementById('loading-overlay'),
+          toast: document.getElementById('toast'),
+          toastMessage: document.getElementById('toast-message'),
+          navButtons: document.querySelectorAll('.nav-btn[data-view]')
+        };
+      },
+
+      bindEvents() {
+        // Generate buttons
+        this.elements.buttons.welcomeGenerate?.addEventListener('click', () => this.generateRecipe());
+        this.elements.buttons.mainGenerate?.addEventListener('click', () => this.generateRecipe());
+
+        // Navigation
+        this.elements.buttons.prevRecipe?.addEventListener('click', () => this.navigateHistory(-1));
+        this.elements.buttons.nextRecipe?.addEventListener('click', () => this.navigateHistory(1));
+
+        // Settings
+        this.elements.buttons.settings?.addEventListener('click', () => this.openSettings());
+        this.elements.buttons.saveSettings?.addEventListener('click', () => this.saveSettings());
+        this.elements.buttons.closeSettings?.addEventListener('click', () => this.closeModal('settings'));
+
+        // Theme
+        this.elements.buttons.themeToggle?.addEventListener('click', () => Theme.toggle());
+
+        // Form inputs
+        this.elements.inputs.cuisineSelect?.addEventListener('change', (e) => {
+          state.cuisinePreference = e.target.value;
+          Storage.saveCuisinePref(e.target.value);
+        });
+
+        this.elements.inputs.dietarySelect?.addEventListener('change', (e) => {
+          state.dietaryPreference = e.target.value;
+          Storage.saveDietaryPref(e.target.value);
+        });
+
+        this.elements.inputs.ingredientsInput?.addEventListener('input', (e) => {
+          state.ingredientsOnHand = e.target.value;
+          Storage.saveIngredients(e.target.value);
+        });
+
+        this.elements.inputs.servingsDefault?.addEventListener('change', (e) => {
+          state.defaultServings = parseInt(e.target.value);
+          Storage.saveDefaultServings(e.target.value);
+        });
+
+        // API Key modal
+        this.elements.buttons.saveApiKey?.addEventListener('click', () => this.saveApiKeyFromModal());
+
+        // Nav buttons
+        this.elements.navButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const view = btn.dataset.view;
+            this.switchView(view);
+            this.elements.navButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+          });
+        });
+
+        // Modal overlay click to close
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+          overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.classList.remove('active');
+          });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+          if (state.currentView === 'recipe') {
+            if (e.key === 'ArrowLeft') this.navigateHistory(-1);
+            if (e.key === 'ArrowRight') this.navigateHistory(1);
+          }
+        });
+      },
+
+      loadState() {
+        Theme.init();
+        
+        state.favorites = Storage.getFavorites();
+        state.history = Storage.getHistory();
+        state.apiKey = Storage.getAPIKey();
+        state.cuisinePreference = Storage.getCuisinePref();
+        state.dietaryPreference = Storage.getDietaryPref();
+        state.ingredientsOnHand = Storage.getIngredients();
+        state.defaultServings = Storage.getDefaultServings();
+        state.currentServings = state.defaultServings;
+
+        // Restore form values
+        if (this.elements.inputs.cuisineSelect) this.elements.inputs.cuisineSelect.value = state.cuisinePreference;
+        if (this.elements.inputs.dietarySelect) this.elements.inputs.dietarySelect.value = state.dietaryPreference;
+        if (this.elements.inputs.ingredientsInput) this.elements.inputs.ingredientsInput.value = state.ingredientsOnHand;
+        if (this.elements.inputs.servingsDefault) this.elements.inputs.servingsDefault.value = state.defaultServings;
+
+        // Check API key
+        if (!state.apiKey) {
+          this.showModal('apiKey');
+        }
+        
+        this.switchView('generator');
+      },
+
+      showModal(name) {
+        this.elements.modals[name]?.classList.add('active');
+      },
+
+      closeModal(name) {
+        this.elements.modals[name]?.classList.remove('active');
+      },
+
+      async generateRecipe() {
+        const apiKey = Storage.getAPIKey();
+        
+        // Show loading
+        if (this.elements.buttons.welcomeGenerate) {
+          this.elements.buttons.welcomeGenerate.innerHTML = '<div class="spinner"></div><span>Generating...</span>';
+          this.elements.buttons.welcomeGenerate.disabled = true;
+        }
+        if (this.elements.buttons.mainGenerate) {
+          this.elements.buttons.mainGenerate.innerHTML = '<div class="spinner"></div><span>Finding...</span>';
+          this.elements.buttons.mainGenerate.disabled = true;
+        }
+        this.elements.loadingOverlay?.classList.add('active');
+
+        try {
+          const recipe = await API.generateRecipe(
+            apiKey,
+            state.cuisinePreference,
+            state.dietaryPreference,
+            state.ingredientsOnHand,
+            state.defaultServings
+          );
+          
+          state.currentRecipe = recipe;
+          state.currentIndex = 0;
+          state.currentServings = recipe.baseServings || state.defaultServings;
+          
+          // Parse ingredients for scaling
+          state.baseIngredients = recipe.ingredients.map(ing => IngredientScaler.parse(ing));
+          
+          state.history = [Storage.addToHistory(recipe), ...Storage.getHistory().slice(1)];
+          
+          this.renderRecipe(recipe);
+          this.switchView('recipe');
+          this.showToast('New recipe generated!');
+        } catch (error) {
+          console.error('Generation failed:', error);
+          this.showToast(`Error: ${error.message}`);
+        } finally {
+          // Reset buttons
+          if (this.elements.buttons.welcomeGenerate) {
+            this.elements.buttons.welcomeGenerate.innerHTML = `<span>What's for dinner?</span><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>`;
+            this.elements.buttons.welcomeGenerate.disabled = false;
+          }
+          if (this.elements.buttons.mainGenerate) {
+            this.elements.buttons.mainGenerate.innerHTML = `<span>Find My Recipe</span><svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>`;
+            this.elements.buttons.mainGenerate.disabled = false;
+          }
+          this.elements.loadingOverlay?.classList.remove('active');
+        }
+      },
+
+      renderRecipe(recipe, servings = null) {
+        const targetServings = servings || state.currentServings;
+        const baseServings = recipe.baseServings || state.defaultServings;
+        const difficultyClass = (recipe.difficulty || 'Medium').toLowerCase();
+
+        // Scale ingredients
+        const scaledIngredients = state.baseIngredients.map(parsed => 
+          IngredientScaler.scale(parsed, baseServings, targetServings)
+        );
+
+        // Generate servings options
+        const servingsOptions = [1, 2, 3, 4, 5, 6, 8, 10, 12].map(n => 
+          `<option value="${n}" ${n === targetServings ? 'selected' : ''}>${n}</option>`
+        ).join('');
+
+        const html = `
+          <div class="recipe-hero">
+            <img class="recipe-hero-image" src="${recipe.imageUrl}" alt="${recipe.dishName}" 
+                 onerror="this.outerHTML='<div class=\\'recipe-hero-fallback\\'>🍽️</div>'">
+            <div class="recipe-hero-overlay">
+              <div class="recipe-badges">
+                <span class="badge badge-cuisine">${recipe.cuisine || 'International'}</span>
+                <span class="badge badge-difficulty ${difficultyClass}">${recipe.difficulty || 'Medium'}</span>
+              </div>
+              <h1 class="recipe-title">${recipe.dishName}</h1>
+            </div>
+          </div>
+          <div class="recipe-body">
+            <div class="recipe-meta">
+              <div class="meta-item">
+                <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>Prep: ${recipe.prepTime || '15 min'}</span>
+              </div>
+              <div class="meta-item">
+                <svg class="meta-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path>
+                </svg>
+                <span>Cook: ${recipe.cookTime || '25 min'}</span>
+              </div>
+              <div class="servings-selector">
+                <label for="servings-select">Servings:</label>
+                <select class="servings-select" id="servings-select">
+                  ${servingsOptions}
+                </select>
+              </div>
+            </div>
+
+            ${recipe.healthBenefits?.length ? `
+            <div class="recipe-section">
+              <div class="section-header">
+                <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+                <h3 class="section-title">Health Benefits</h3>
+              </div>
+              <div class="health-list">
+                ${recipe.healthBenefits.map(b => `
+                  <div class="health-item">
+                    <span class="health-bullet"></span>
+                    <span>${b}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            ` : ''}
+
+            <div class="recipe-section">
+              <div class="section-header">
+                <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                </svg>
+                <h3 class="section-title">Ingredients</h3>
+              </div>
+              <div class="ingredients-grid" id="ingredients-list">
+                ${scaledIngredients.map((ing, i) => `
+                  <div class="ingredient-item" data-index="${i}">
+                    <span class="ingredient-bullet"></span>
+                    <span>${ing}</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <div class="recipe-section">
+              <div class="section-header">
+                <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                </svg>
+                <h3 class="section-title">Instructions</h3>
+              </div>
+              <ol class="instructions-list">
+                ${(recipe.instructions || []).map((inst, i) => `
+                  <li class="instruction-item">
+                    <span class="instruction-number">${i + 1}</span>
+                    <span class="instruction-text">${inst}</span>
+                  </li>
+                `).join('')}
+              </ol>
+            </div>
+
+            <div class="recipe-actions">
+              <button class="action-btn action-btn-secondary" id="action-save">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+                <span>Save</span>
+              </button>
+              <button class="action-btn action-btn-secondary" id="action-copy">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                </svg>
+                <span>Copy</span>
+              </button>
+              <button class="action-btn action-btn-secondary" id="action-print">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                </svg>
+                <span>Print</span>
+              </button>
+              <button class="action-btn action-btn-primary" id="action-regenerate">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                <span>New</span>
+              </button>
+            </div>
+          </div>
+        `;
+
+        this.elements.recipeCard.innerHTML = html;
+
+        // Bind servings selector
+        document.getElementById('servings-select')?.addEventListener('change', (e) => {
+          const newServings = parseInt(e.target.value);
+          state.currentServings = newServings;
+          this.updateIngredients(newServings);
+        });
+
+        // Bind action buttons
+        document.getElementById('action-save')?.addEventListener('click', () => this.saveFavorite());
+        document.getElementById('action-copy')?.addEventListener('click', () => this.copyRecipe());
+        document.getElementById('action-print')?.addEventListener('click', () => window.print());
+        document.getElementById('action-regenerate')?.addEventListener('click', () => this.generateRecipe());
+
+        this.updateNavigation();
+      },
+
+      updateIngredients(targetServings) {
+        const baseServings = state.currentRecipe.baseServings || state.defaultServings;
+        const ingredientsList = document.getElementById('ingredients-list');
+        if (!ingredientsList) return;
+
+        state.baseIngredients.forEach((parsed, i) => {
+          const scaled = IngredientScaler.scale(parsed, baseServings, targetServings);
+          const item = ingredientsList.querySelector(`[data-index="${i}"]`);
+          if (item) {
+            const span = item.querySelector('span:last-child');
+            if (span) {
+              span.textContent = scaled;
+              span.classList.add('ingredient-scaled');
+              setTimeout(() => span.classList.remove('ingredient-scaled'), 400);
+            }
+          }
+        });
+      },
+
+      saveFavorite() {
+        if (!state.currentRecipe) return;
+        
+        const existing = state.favorites.find(f => f.dishName === state.currentRecipe.dishName);
+        if (existing) {
+          this.showToast('Already in favorites!');
+          return;
+        }
+
+        Storage.saveFavorite(state.currentRecipe);
+        state.favorites = Storage.getFavorites();
+        this.showToast('Recipe saved!');
+      },
+
+      copyRecipe() {
+        if (!state.currentRecipe) return;
+        const r = state.currentRecipe;
+        const baseServings = r.baseServings || state.defaultServings;
+
+        // Get scaled ingredients
+        const scaledIngredients = state.baseIngredients.map(parsed => 
+          IngredientScaler.scale(parsed, baseServings, state.currentServings)
+        );
+
+        const text = `${r.dishName}
+${r.cuisine} • ${r.difficulty}
+Prep: ${r.prepTime} • Cook: ${r.cookTime}
+Servings: ${state.currentServings}
+
+INGREDIENTS
+${scaledIngredients.map(i => '• ' + i).join('\n')}
+
+INSTRUCTIONS
+${r.instructions.map((inst, i) => (i + 1) + '. ' + inst).join('\n')}
+
+Generated by Savory`;
+
+        navigator.clipboard.writeText(text).then(() => {
+          this.showToast('Copied to clipboard!');
+        }).catch(() => {
+          this.showToast('Failed to copy');
+        });
+      },
+
+      navigateHistory(direction) {
+        const newIndex = state.currentIndex + direction;
+        if (newIndex >= 0 && newIndex < state.history.length) {
+          state.currentIndex = newIndex;
+          state.currentRecipe = state.history[newIndex];
+          state.currentServings = state.currentRecipe.baseServings || state.defaultServings;
+          state.baseIngredients = state.currentRecipe.ingredients.map(ing => IngredientScaler.parse(ing));
+          this.renderRecipe(state.currentRecipe);
+        }
+      },
+
+      updateNavigation() {
+        if (this.elements.buttons.prevRecipe) {
+          this.elements.buttons.prevRecipe.disabled = state.currentIndex >= state.history.length - 1;
+        }
+        if (this.elements.buttons.nextRecipe) {
+          this.elements.buttons.nextRecipe.disabled = state.currentIndex <= 0;
+        }
+      },
+
+      switchView(viewName) {
+        Object.values(this.elements.screens).forEach(screen => {
+          screen?.classList.add('hidden');
+        });
+
+        this.elements.screens[viewName]?.classList.remove('hidden');
+
+        this.elements.navButtons.forEach(btn => {
+          btn.classList.remove('active');
+          if (btn.dataset.view === viewName) btn.classList.add('active');
+        });
+
+        state.currentView = viewName;
+
+        if (viewName === 'favorites') this.renderFavorites();
+        if (viewName === 'history') this.renderHistory();
+      },
+
+      renderFavorites() {
+        if (!state.favorites.length) {
+          this.elements.favoritesGrid.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">❤️</div>
+              <h3 class="empty-title">No favorites yet</h3>
+              <p class="empty-text">Save recipes to see them here</p>
+            </div>
+          `;
+          return;
+        }
+
+        this.elements.favoritesGrid.innerHTML = state.favorites.map(fav => `
+          <div class="card-item" data-id="${fav.id}">
+            <img class="card-thumbnail" src="${fav.imageUrl || FOOD_IMAGES[0]}" alt="${fav.dishName}" onerror="this.style.background='var(--bg-tertiary)'">
+            <div class="card-content">
+              <div class="card-title">${fav.dishName}</div>
+              <div class="card-meta">${fav.cuisine} • ${fav.difficulty}</div>
+              <div class="card-badges">
+                <span class="card-badge">${fav.prepTime}</span>
+                <span class="card-badge">${fav.cookTime}</span>
+              </div>
+            </div>
+            <button class="card-delete" data-id="${fav.id}">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+              </svg>
+            </button>
+          </div>
+        `).join('');
+
+        // Bind events
+        this.elements.favoritesGrid.querySelectorAll('.card-item').forEach(card => {
+          card.addEventListener('click', (e) => {
+            if (!e.target.closest('.card-delete')) {
+              const id = parseInt(card.dataset.id);
+              const recipe = state.favorites.find(f => f.id === id);
+              if (recipe) {
+                state.currentRecipe = recipe;
+                state.currentServings = recipe.baseServings || state.defaultServings;
+                state.baseIngredients = recipe.ingredients.map(ing => IngredientScaler.parse(ing));
+                state.history = [Storage.addToHistory(recipe), ...Storage.getHistory().slice(1)];
+                this.renderRecipe(recipe);
+                this.switchView('recipe');
+              }
+            }
+          });
+        });
+
+        this.elements.favoritesGrid.querySelectorAll('.card-delete').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = parseInt(btn.dataset.id);
+            Storage.removeFavorite(id);
+            state.favorites = Storage.getFavorites();
+            this.renderFavorites();
+            this.showToast('Removed from favorites');
+          });
+        });
+      },
+
+      renderHistory() {
+        if (!state.history.length) {
+          this.elements.historyGrid.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">🕐</div>
+              <h3 class="empty-title">No history yet</h3>
+              <p class="empty-text">Generate your first recipe</p>
+            </div>
+          `;
+          return;
+        }
+
+        this.elements.historyGrid.innerHTML = state.history.map(item => `
+          <div class="card-item" data-id="${item.id}">
+            <img class="card-thumbnail" src="${item.imageUrl || FOOD_IMAGES[0]}" alt="${item.dishName}" onerror="this.style.background='var(--bg-tertiary)'">
+            <div class="card-content">
+              <div class="card-title">${item.dishName}</div>
+              <div class="card-meta">${item.cuisine} • ${item.difficulty}</div>
+              <div class="card-badges">
+                <span class="card-badge">${item.prepTime}</span>
+                <span class="card-badge">${item.cookTime}</span>
+              </div>
+            </div>
+          </div>
+        `).join('');
+
+        this.elements.historyGrid.querySelectorAll('.card-item').forEach(card => {
+          card.addEventListener('click', () => {
+            const id = parseInt(card.dataset.id);
+            const recipe = state.history.find(h => h.id === id);
+            if (recipe) {
+              state.currentRecipe = recipe;
+              state.currentIndex = state.history.findIndex(h => h.id === id);
+              state.currentServings = recipe.baseServings || state.defaultServings;
+              state.baseIngredients = recipe.ingredients.map(ing => IngredientScaler.parse(ing));
+              this.renderRecipe(recipe);
+              this.switchView('recipe');
+            }
+          });
+        });
+      },
+
+      openSettings() {
+        this.elements.inputs.settingsApiKey.value = Storage.getAPIKey() || '';
+        this.showModal('settings');
+      },
+
+      saveSettings() {
+        const key = this.elements.inputs.settingsApiKey.value.trim();
+        if (key) {
+          Storage.saveAPIKey(key);
+          state.apiKey = key;
+          this.showToast('Settings saved!');
+        }
+        this.closeModal('settings');
+      },
+
+      saveApiKeyFromModal() {
+        const key = this.elements.inputs.apiKey.value.trim();
+        if (key) {
+          Storage.saveAPIKey(key);
+          state.apiKey = key;
+        }
+        this.closeModal('apiKey');
+        this.switchView('generator');
+      },
+
+      showToast(message) {
+        this.elements.toastMessage.textContent = message;
+        this.elements.toast.classList.add('show');
+        setTimeout(() => this.elements.toast.classList.remove('show'), 2500);
+      }
+    };
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => UI.init());
+
+    // Service Worker Registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => {
+            console.log('SW registered:', registration.scope);
+            
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  UI.showToast('Update available! Refresh for new version.');
+                }
+              });
+            });
+          })
+          .catch(error => {
+            console.log('SW registration failed:', error);
+          });
+      });
+    }
+
+    // Handle URL parameters for shortcuts
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('action') === 'generate') {
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => UI.generateRecipe(), 500);
+      });
+    }
+    if (urlParams.get('view') === 'favorites') {
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => UI.switchView('favorites'), 100);
+      });
+    }
+  </script>
+</body>
+</html>
