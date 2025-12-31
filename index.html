@@ -1783,7 +1783,7 @@
     // ═══════════════════════════════════════════════════════════════
     // CONFIGURATION
     // ═══════════════════════════════════════════════════════════════
-    const DEFAULT_API_KEY = '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';
+    const DEFAULT_API_KEY = null; // Users must provide their own OpenRouter API key
     
     const FOOD_IMAGES = [
       'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1200&q=80',
@@ -1854,7 +1854,8 @@
       },
 
       saveAPIKey(key) { this.save(this.KEYS.API_KEY, key); },
-      getAPIKey() { return this.get(this.KEYS.API_KEY) || DEFAULT_API_KEY; },
+      getAPIKey() { return this.get(this.KEYS.API_KEY) || null; },
+      hasAPIKey() { return !!this.get(this.KEYS.API_KEY); },
 
       saveTheme(theme) { this.save(this.KEYS.THEME, theme); },
       getTheme() { return this.get(this.KEYS.THEME, 'light'); },
@@ -2302,6 +2303,13 @@ Be precise with measurements. Return ONLY valid JSON.`
 
       async generateRecipe() {
         const apiKey = Storage.getAPIKey();
+        
+        // Check for API key
+        if (!apiKey) {
+          this.showModal('apiKey');
+          this.showToast('Please enter your OpenRouter API key first');
+          return;
+        }
         
         // Show loading
         if (this.elements.buttons.welcomeGenerate) {
